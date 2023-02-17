@@ -1,0 +1,45 @@
+version: '3'
+
+# todo: split envs into dev and prod
+
+services:
+  api:
+    container_name: api
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: development
+      args:
+        - NODE_ENV=development
+    env_file:
+      - envs/.env
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    links:
+      - postgres:postgres
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev
+
+  postgres:
+    container_name: postgres
+    image: postgres:alpine
+    restart: always
+    env_file:
+      - envs/.env
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./tools/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  postgres_admin:
+    container_name: postgres_admin
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    env_file:
+      - envs/.env
+    ports:
+      - 5050:80

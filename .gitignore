@@ -1,0 +1,3 @@
+client/
+postgres-data/
+envs/.env
