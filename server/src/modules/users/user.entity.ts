@@ -13,4 +13,8 @@ export class User extends Model<User> {
     allowNull: true,
   })
   password: string;
+  @Column({
+    nullable: true
+  })
+  currentHashedRefreshToken?: string;
 }

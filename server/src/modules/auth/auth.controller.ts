@@ -32,7 +32,8 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Req() req) {
-    return this.authService.login(req.user);
+    const { password, ...user } = req.user.dataValues
+    return this.authService.login(user);
   }
 
   @Get('/42')

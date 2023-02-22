@@ -31,6 +31,7 @@ export class AuthService {
 
     const { password, ...result } = newUser['dataValues'];
 
+
     const token = await this.generateToken(result);
 
     return { user: result, token };
@@ -38,13 +39,14 @@ export class AuthService {
 
   public async register(user: UserInput) {
     const hashedPassword = await this.hashPassword(user.password);
+    console.log(hashedPassword);
     const createdUser = await this.usersService.create({
       ...user,
       password: hashedPassword,
     });
     const { password, ...result } = createdUser['dataValues'];
 
-    const token = await this.generateToken(user);
+    const token = await this.generateToken(result);
     return { user: result, token };
   }
 
